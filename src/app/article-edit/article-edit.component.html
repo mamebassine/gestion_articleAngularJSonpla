@@ -1,0 +1,21 @@
+<h1>Modifier l'article</h1>
+
+<form (ngSubmit)="onSubmit()" #articleForm="ngForm">
+  <div>
+    <label for="title">Titre</label>
+    <input type="text" id="title" required [(ngModel)]="article.title" name="title" #title="ngModel">
+    <div *ngIf="title.invalid && (title.dirty || title.touched)">
+      <small *ngIf="title.errors?.required">Le titre est requis.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="body">Contenu</label>
+    <textarea id="body" required [(ngModel)]="article.body" name="body" #body="ngModel"></textarea>
+    <div *ngIf="body.invalid && (body.dirty || body.touched)">
+      <small *ngIf="body.errors?.required">Le contenu est requis.</small>
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="articleForm.invalid">Enregistrer</button>
+</form>
