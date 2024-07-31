@@ -1,1 +1,12 @@
-<p>article-detail works!</p>
+<h2>Détails de l'Article</h2>
+
+<div *ngIf="article; else noArticle">
+  <h3>{{ article.title }}</h3>
+  <p>{{ article.body }}</p>
+</div>
+
+<ng-template #noArticle>
+  <p>Article non trouvé.</p>
+</ng-template>
+
+<button (click)="backToList()">Retour à la liste</button>
