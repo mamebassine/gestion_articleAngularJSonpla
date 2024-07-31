@@ -15,9 +15,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from '../data.service';
 import { Article } from '../article.interface';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-article-form',
+  imports : [FormsModule],
+  standalone : true,
   templateUrl: './article-form.component.html',
   styleUrls: ['./article-form.component.css']
 })
