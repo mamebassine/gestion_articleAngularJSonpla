@@ -1,19 +1,3 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-article-detail',
-//   standalone: true,
-//   imports: [],
-//   templateUrl: './article-detail.component.html',
-//   styleUrl: './article-detail.component.css'
-// })
-// export class ArticleDetailComponent {
-
-// }
-
-
-
-
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../data.service';
@@ -21,6 +5,7 @@ import { Article } from '../article.interface';
 
 @Component({
   selector: 'app-article-detail',
+  
   templateUrl: './article-detail.component.html',
   styleUrls: ['./article-detail.component.css']
 })
@@ -34,9 +19,17 @@ export class ArticleDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.dataService.getArticle(id).subscribe(article => {
-      this.article = article;
-    });
+    if (id) {
+      this.dataService.getArticle(id).subscribe(
+        (article) => {
+          this.article = article;
+        },
+        (error) => {
+          console.error('Error fetching article:', error);
+          // Vous pouvez ajouter une gestion d'erreur ici, comme rediriger l'utilisateur vers une page d'erreur
+        }
+      );
+    }
   }
 
   backToList(): void {

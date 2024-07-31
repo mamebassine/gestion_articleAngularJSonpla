@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <h1>Liste des Articles</h1>
-<a routerLink="/add">Ajouter un nouvel article</a>
+<a routerLink="./new">Ajouter un nouvel article</a>
 
 <div class="card-container">
   <div *ngFor="let article of articles" class="card">
@@ -12,8 +12,8 @@
       {{ article.body }}
     </div>
     <div class="card-actions">
-      <a [routerLink]="['/article', article.id]">
-        <i class="fas fa-eye"></i> <!-- Icône pour voir les détails -->
+        <a [routerLink]="['/articles', article.id]">
+            <i class="fas fa-eye"></i> <!-- Icône pour voir les détails -->
       </a>
       <a [routerLink]="['/edit', article.id]">
         <i class="fas fa-edit"></i> <!-- Icône pour modifier -->
