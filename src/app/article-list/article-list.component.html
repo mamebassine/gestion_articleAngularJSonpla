@@ -1,7 +1,5 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-
-<!-- ajout -->
 <h1>{{ isEdit ? 'Modifier l\'article' : 'Ajouter un nouvel article' }}</h1>
 
 <form (ngSubmit)="onSubmit()" #articleForm="ngForm">
@@ -30,15 +28,63 @@
     </div>
     <div class="card-actions">
         <a [routerLink]="['/articles', article.id]">
-            <i class="fas fa-eye"></i> <!-- Icône pour voir les détails -->
+            <i class="fas fa-eye"></i> 
       </a>
       <a [routerLink]="['./edit', article.id]">
+        <i class="fas fa-edit"></i> 
+      </a>
+      <button (click)="deleteArticle(article.id)">
+        <i class="fas fa-trash-alt"></i> 
+      </button>
+    </div>
+  </div>
+</div>
+ -->
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<h1>{{ isEdit ? 'Modifier l\'article' : 'Ajouter un nouvel article' }}</h1>
+
+<form (ngSubmit)="onSubmit()" #articleForm="ngForm">
+  <div>
+    <label for="title">Titre</label>
+    <input type="text" id="title" required [(ngModel)]="article.title" name="title">
+  </div>
+
+  <div>
+    <label for="body">Contenu</label>
+    <textarea id="body" required [(ngModel)]="article.body" name="body"></textarea>
+  </div>
+
+  <button type="submit">Enregistrer</button>
+</form>
+
+<h1>Liste des Articles</h1>
+<a [routerLink]="['/articles/new']">Ajouter un nouvel article</a>
+
+<div class="card-container">
+  <div *ngFor="let article of articles" class="card">
+    <div class="card-header">
+      {{ article.title }}
+    </div>
+    <div class="card-body">
+      {{ article.body }}
+    </div>
+    <div class="card-actions">
+      <a [routerLink]="['/articles', article.id]">
+        <i class="fas fa-eye"></i> <!-- Icône pour voir les détails -->
+      </a>
+
+      <a (click)="modifier(article.id)">
         <i class="fas fa-edit"></i> <!-- Icône pour modifier -->
       </a>
+      
+      <!-- <a [routerLink]="['/articles/new', article.id]">
+        <i class="fas fa-edit"></i> 
+      </a> -->
       <button (click)="deleteArticle(article.id)">
         <i class="fas fa-trash-alt"></i> <!-- Icône pour supprimer -->
       </button>
     </div>
   </div>
 </div>
-
