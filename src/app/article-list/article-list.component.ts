@@ -57,18 +57,38 @@ export class ArticleListComponent implements OnInit {
     }
   }
 
+  // onSubmit(): void {
+  //   if (this.isEdit) {
+  //     // Mettre à jour l'article existant
+  //     this.dataService.updateArticle(this.article).subscribe(() => {
+  //       this.router.navigate(['/articles']); // Redirection après modification
+  //     });
+  //   } else {
+  //     // Créer un nouvel article
+  //     this.dataService.createArticle(this.article).subscribe((newArticle) => {
+  //       this.articles.unshift(newArticle);
+  //       this.router.navigate(['/articles']); // Redirection après création
+  //     });
+  //   }
+  // }
+
+
   onSubmit(): void {
     if (this.isEdit) {
       // Mettre à jour l'article existant
       this.dataService.updateArticle(this.article).subscribe(() => {
+        this.article = { title: '', body: '' }; // Réinitialiser le formulaire
+        this.isEdit = false; // Désactiver le mode édition
         this.router.navigate(['/articles']); // Redirection après modification
       });
     } else {
       // Créer un nouvel article
       this.dataService.createArticle(this.article).subscribe((newArticle) => {
         this.articles.unshift(newArticle);
+        this.article = { title: '', body: '' }; // Réinitialiser le formulaire
         this.router.navigate(['/articles']); // Redirection après création
       });
     }
   }
+  
 }
