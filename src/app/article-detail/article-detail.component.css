@@ -1,0 +1,66 @@
+/* Styles généraux */
+h2 {
+  color: #0a0a0a; /* Couleur pour le titre principal */
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+h3 {
+  color: #FF6F61; /* Couleur pour le titre de l'article */
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #080808; /* Couleur du texte */
+  margin-bottom: 10px;
+}
+
+h4 {
+  color: #FF6F61; /* Couleur pour le sous-titre des commentaires */
+  font-size: 18px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+h5 {
+  color: #FF6F61; /* Couleur pour le nom du commentateur */
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+button {
+  background-color: #FFD0E6; /* Couleur de fond pour le bouton */
+  border: none;
+  color: #343F69; /* Couleur du texte du bouton */
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #FFC0CB; /* Couleur de fond du bouton au survol */
+}
+
+hr {
+  border: 1px solid #FFD0E6; /* Couleur de la ligne horizontale */
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* Styles pour les sections vides */
+p.no-article, p.no-comments {
+  font-style: italic;
+  color: #999; /* Couleur pour le texte des sections vides */
+}
+
+/* Conteneur de commentaires */
+.comment-container {
+  border: 1px solid #FFD0E6; /* Bordure autour des commentaires */
+  padding: 10px;
+  margin-top: 20px;
+}
