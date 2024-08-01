@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../data.service';
 import { Article } from '../article.interface';
-import { Comment } from '../comment.interface'; 
+import { Comment } from '../comment'; 
 import { CommonModule } from '@angular/common';
 
 @Component({
