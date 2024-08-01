@@ -1,5 +1,64 @@
 <h2>Détails de l'Article</h2>
 
+<!-- Vérifier si l'article existe -->
+<div *ngIf="article; else noArticle">
+  <h3>{{ article.title }}</h3>
+  <p>{{ article.body }}</p>
+
+  <!-- Section pour afficher les commentaires -->
+  <h4>Commentaires</h4>
+  <div *ngIf="comments.length; else noComments">
+    <!-- Boucle pour afficher chaque commentaire -->
+    <div *ngFor="let comment of comments">
+      <h5>{{ comment.name }}</h5>
+      <p><strong>Email:</strong> {{ comment.email }}</p>
+      <p>{{ comment.body }}</p>
+      <hr />
+    </div>
+  </div>
+  <!-- Template affiché si aucun commentaire n'est disponible -->
+  <ng-template #noComments>
+    <p>Aucun commentaire pour cet article.</p>
+  </ng-template>
+</div>
+
+<!-- Template affiché si aucun article n'est trouvé -->
+<ng-template #noArticle>
+  <p>Article non trouvé.</p>
+</ng-template>
+
+<!-- Bouton pour revenir à la liste des articles -->
+<button (click)="backToList()">Retour à la liste</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <h2>Détails de l'Article</h2>
+
 <div *ngIf="article; else noArticle">
   <h3>{{ article.title }}</h3>
   <p>{{ article.body }}</p>
@@ -9,4 +68,4 @@
   <p>Article non trouvé.</p>
 </ng-template>
 
-<button (click)="backToList()">Retour à la liste</button>
+<button (click)="backToList()">Retour à la liste</button> -->
