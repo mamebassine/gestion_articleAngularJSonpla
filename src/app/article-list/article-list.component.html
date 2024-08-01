@@ -15,7 +15,7 @@
         <a [routerLink]="['/articles', article.id]">
             <i class="fas fa-eye"></i> <!-- Icône pour voir les détails -->
       </a>
-      <a [routerLink]="['/edit', article.id]">
+      <a [routerLink]="['./edit', article.id]">
         <i class="fas fa-edit"></i> <!-- Icône pour modifier -->
       </a>
       <button (click)="deleteArticle(article.id)">

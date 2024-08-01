@@ -1,3 +1,23 @@
+<!-- 
+<h1>{{ isEdit ? 'Modifier l\'article' : 'Ajouter un nouvel article' }}</h1>
+
+<form (ngSubmit)="onSubmit()" #articleForm="ngForm">
+  <div>
+    <label for="title">Titre</label>
+    <input type="text" id="title" required [(ngModel)]="article.title" name="title">
+  </div>
+
+  <div>
+    <label for="body">Contenu</label>
+    <textarea id="body" required [(ngModel)]="article.body" name="body"></textarea>
+  </div>
+
+  <button type="submit">Enregistrer</button>
+</form> -->
+
+
+
+
 
 <h1>{{ isEdit ? 'Modifier l\'article' : 'Ajouter un nouvel article' }}</h1>
 
