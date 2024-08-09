@@ -19,7 +19,7 @@ export class ArticleListComponent implements OnInit {
   isEdit: boolean = false; // Mode édition ou création
 
   constructor(private dataService: DataService, private route: ActivatedRoute,
-    private router: Router) {}
+              private router: Router) {}
 
   ngOnInit(): void {
     // Charger tous les articles
@@ -37,44 +37,41 @@ export class ArticleListComponent implements OnInit {
     }
   }
 
-
-  modifier(id: any): void {
-    this.dataService.getArticle(id).subscribe(data => {
-      this.article = data; // Remplacez 'article' par la propriété où vous stockez l'article récupéré
-  
-      // Optionnel: Naviguer vers la page de modification si nécessaire
-    });
+  modifier(id: number | undefined): void {
+    if (id !== undefined) {
+      this.dataService.getArticle(id).subscribe(data => {
+        this.article = data;
+        this.isEdit = true;
+      });
+    } else {
+      console.error('L\'ID est indéfini, impossible de modifier l\'article.');
+    }
   }
-  
 
   deleteArticle(id: number | undefined): void {
     if (id !== undefined) {
       this.dataService.deleteArticle(id).subscribe(() => {
         this.articles = this.articles.filter(article => article.id !== id);
       });
+    } else {
+      console.error('L\'ID est indéfini, impossible de supprimer l\'article.');
     }
   }
 
-  // onSubmit(): void {
-  //   if (this.isEdit) {
-  //     // Mettre à jour l'article existant
-  //     this.dataService.updateArticle(this.article).subscribe(() => {
-  //       this.router.navigate(['/articles']); // Redirection après modification
-  //     });
-  //   } else {
-  //     // Créer un nouvel article
-  //     this.dataService.createArticle(this.article).subscribe((newArticle) => {
-  //       this.articles.unshift(newArticle);
-  //       this.router.navigate(['/articles']); // Redirection après création
-  //     });
-  //   }
-  // }
-
-
-  onSubmit(): void {
+  onSubmit(articleForm: any): void {
+    if (articleForm.invalid) {
+      console.error('Le formulaire contient des erreurs.');
+      return;
+    }
+  
     if (this.isEdit) {
       // Mettre à jour l'article existant
-      this.dataService.updateArticle(this.article).subscribe(() => {
+      this.dataService.updateArticle(this.article).subscribe((updatedArticle) => {
+        // Mise à jour de l'article dans la liste des articles
+        const index = this.articles.findIndex(a => a.id === updatedArticle.id);
+        if (index !== -1) {
+          this.articles[index] = updatedArticle;
+        }
         this.article = { title: '', body: '' }; // Réinitialiser le formulaire
         this.isEdit = false; // Désactiver le mode édition
         this.router.navigate(['/articles']); // Redirection après modification
@@ -88,5 +85,4 @@ export class ArticleListComponent implements OnInit {
       });
     }
   }
-  
-}
+}  
