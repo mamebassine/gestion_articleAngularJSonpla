@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DataService } from '../data.service';
 import { Article } from '../article.interface';
@@ -17,9 +17,10 @@ export class ArticleListComponent implements OnInit {
   articles: Article[] = [];
   article: Article = { title: '', body: '' }; // Article à créer ou modifier
   isEdit: boolean = false; // Mode édition ou création
+  errorMessage: string = ''; // Message d'erreur pour le formulaire
 
   constructor(private dataService: DataService, private route: ActivatedRoute,
-    private router: Router) {}
+              private router: Router) {}
 
   ngOnInit(): void {
     // Charger tous les articles
@@ -37,44 +38,54 @@ export class ArticleListComponent implements OnInit {
     }
   }
 
-
-  modifier(id: any): void {
-    this.dataService.getArticle(id).subscribe(data => {
-      this.article = data; // Remplacez 'article' par la propriété où vous stockez l'article récupéré
-  
-      // Optionnel: Naviguer vers la page de modification si nécessaire
-    });
+  modifier(id: number | undefined): void {
+    if (id !== undefined) {
+      this.dataService.getArticle(id).subscribe(data => {
+        this.article = data;
+        this.isEdit = true;
+      });
+    } else {
+      console.error('L\'ID est indéfini, impossible de modifier l\'article.');
+    }
   }
-  
 
   deleteArticle(id: number | undefined): void {
     if (id !== undefined) {
       this.dataService.deleteArticle(id).subscribe(() => {
         this.articles = this.articles.filter(article => article.id !== id);
       });
+    } else {
+      console.error('L\'ID est indéfini, impossible de supprimer l\'article.');
     }
   }
 
-  // onSubmit(): void {
-  //   if (this.isEdit) {
-  //     // Mettre à jour l'article existant
-  //     this.dataService.updateArticle(this.article).subscribe(() => {
-  //       this.router.navigate(['/articles']); // Redirection après modification
-  //     });
-  //   } else {
-  //     // Créer un nouvel article
-  //     this.dataService.createArticle(this.article).subscribe((newArticle) => {
-  //       this.articles.unshift(newArticle);
-  //       this.router.navigate(['/articles']); // Redirection après création
-  //     });
-  //   }
-  // }
+  onSubmit(articleForm: NgForm): void {
+    this.errorMessage = ''; // Réinitialiser le message d'erreur
 
+    if (articleForm.invalid) {
+      this.errorMessage = 'Le formulaire contient des erreurs.';
+      return;
+    }
 
-  onSubmit(): void {
+    // Validation des champs
+    if (!this.validateTitle(this.article.title)) {
+      this.errorMessage = 'Le titre ne doit contenir que des lettres et ne pas inclure de balises HTML.';
+      return;
+    }
+
+    if (!this.validateBody(this.article.body)) {
+      this.errorMessage = 'Le contenu ne doit contenir que des lettres, ne pas inclure de balises HTML et doit avoir moins de 500 mots.';
+      return;
+    }
+  
     if (this.isEdit) {
       // Mettre à jour l'article existant
-      this.dataService.updateArticle(this.article).subscribe(() => {
+      this.dataService.updateArticle(this.article).subscribe((updatedArticle) => {
+        // Mise à jour de l'article dans la liste des articles
+        const index = this.articles.findIndex(a => a.id === updatedArticle.id);
+        if (index !== -1) {
+          this.articles[index] = updatedArticle;
+        }
         this.article = { title: '', body: '' }; // Réinitialiser le formulaire
         this.isEdit = false; // Désactiver le mode édition
         this.router.navigate(['/articles']); // Redirection après modification
@@ -88,5 +99,23 @@ export class ArticleListComponent implements OnInit {
       });
     }
   }
-  
+
+  validateTitle(title: string): boolean {
+    // Validation pour ne contenir que des lettres et ne pas inclure de balises HTML
+    const titlePattern = /^[A-Za-z\s]+$/;
+    const noHtmlTagsPattern = /<[^>]*>/;
+    return titlePattern.test(title) && !noHtmlTagsPattern.test(title);
+  }
+
+  validateBody(body: string): boolean {
+    // Validation pour ne contenir que des lettres, ne pas inclure de balises HTML et avoir moins de 500 mots
+    const bodyPattern = /^[A-Za-z\s]+$/;
+    const noHtmlTagsPattern = /<[^>]*>/;
+    const wordLimit = 500;
+    const wordCount = body.trim().split(/\s+/).length;
+
+    return bodyPattern.test(body) &&
+           !noHtmlTagsPattern.test(body) &&
+           wordCount <= wordLimit;
+  }
 }

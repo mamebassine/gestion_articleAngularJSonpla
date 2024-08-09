@@ -2,18 +2,26 @@
 
 <h1>{{ isEdit ? 'Modifier l\'article' : 'Ajouter un nouvel article' }}</h1>
 
-<form (ngSubmit)="onSubmit()" #articleForm="ngForm">
-  <div>
+<form (ngSubmit)="onSubmit(articleForm)" #articleForm="ngForm">
+  <div class="form-group">
     <label for="title">Titre</label>
-    <input type="text" id="title" required [(ngModel)]="article.title" name="title">
+    <input type="text" id="title" required minlength="3" [(ngModel)]="article.title" name="title" #title="ngModel" class="form-control" [ngClass]="{ 'is-invalid': title.invalid && title.touched }">
+    <div *ngIf="title.invalid && title.touched" class="invalid-feedback">
+      <div *ngIf="title.errors?.['required']">Le titre est requis.</div>
+      <div *ngIf="title.errors?.['minlength']">Le titre doit contenir au moins 3 caractères.</div>
+    </div>
   </div>
 
-  <div>
+  <div class="form-group">
     <label for="body">Contenu</label>
-    <textarea id="body" required [(ngModel)]="article.body" name="body"></textarea>
+    <textarea id="body" required minlength="10" [(ngModel)]="article.body" name="body" #body="ngModel" class="form-control" [ngClass]="{ 'is-invalid': body.invalid && body.touched }"></textarea>
+    <div *ngIf="body.invalid && body.touched" class="invalid-feedback">
+      <div *ngIf="body.errors?.['required']">Le contenu est requis.</div>
+      <div *ngIf="body.errors?.['minlength']">Le contenu doit contenir au moins 10 caractères.</div>
+    </div>
   </div>
 
-  <button type="submit">Enregistrer</button>
+  <button type="submit" class="btn btn-primary" [disabled]="articleForm.invalid">Enregistrer</button>
 </form>
 
 <h1>Liste des Articles</h1>
@@ -33,9 +41,10 @@
       </a>
 
       <a (click)="modifier(article.id)">
-  <i class="fas fa-edit"></i> <!-- Icône pour modifier -->
-</a>
-<button (click)="deleteArticle(article.id)">
+        <i class="fas fa-edit"></i> <!-- Icône pour modifier -->
+      </a>
+      
+      <button (click)="deleteArticle(article.id)">
         <i class="fas fa-trash-alt"></i> <!-- Icône pour supprimer -->
       </button>
     </div>

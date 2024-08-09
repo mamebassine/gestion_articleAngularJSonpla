@@ -9,6 +9,8 @@ import { Comment } from './comment';
   providedIn: 'root'
 })
 export class DataService {
+  // private apiUrl = 'http://127.0.0.1:8000/api/articles';   //link biii
+
   private apiUrl = 'https://jsonplaceholder.typicode.com/posts'; 
   private commentsUrl = 'https://jsonplaceholder.typicode.com/comments'; // URL pour les commentaires
 
