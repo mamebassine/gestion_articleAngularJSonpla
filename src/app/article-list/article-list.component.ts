@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DataService } from '../data.service';
 import { Article } from '../article.interface';
@@ -17,6 +17,7 @@ export class ArticleListComponent implements OnInit {
   articles: Article[] = [];
   article: Article = { title: '', body: '' }; // Article à créer ou modifier
   isEdit: boolean = false; // Mode édition ou création
+  errorMessage: string = ''; // Message d'erreur pour le formulaire
 
   constructor(private dataService: DataService, private route: ActivatedRoute,
               private router: Router) {}
@@ -58,9 +59,22 @@ export class ArticleListComponent implements OnInit {
     }
   }
 
-  onSubmit(articleForm: any): void {
+  onSubmit(articleForm: NgForm): void {
+    this.errorMessage = ''; // Réinitialiser le message d'erreur
+
     if (articleForm.invalid) {
-      console.error('Le formulaire contient des erreurs.');
+      this.errorMessage = 'Le formulaire contient des erreurs.';
+      return;
+    }
+
+    // Validation des champs
+    if (!this.validateTitle(this.article.title)) {
+      this.errorMessage = 'Le titre ne doit contenir que des lettres et ne pas inclure de balises HTML.';
+      return;
+    }
+
+    if (!this.validateBody(this.article.body)) {
+      this.errorMessage = 'Le contenu ne doit contenir que des lettres, ne pas inclure de balises HTML et doit avoir moins de 500 mots.';
       return;
     }
   
@@ -85,4 +99,23 @@ export class ArticleListComponent implements OnInit {
       });
     }
   }
-}  
+
+  validateTitle(title: string): boolean {
+    // Validation pour ne contenir que des lettres et ne pas inclure de balises HTML
+    const titlePattern = /^[A-Za-z\s]+$/;
+    const noHtmlTagsPattern = /<[^>]*>/;
+    return titlePattern.test(title) && !noHtmlTagsPattern.test(title);
+  }
+
+  validateBody(body: string): boolean {
+    // Validation pour ne contenir que des lettres, ne pas inclure de balises HTML et avoir moins de 500 mots
+    const bodyPattern = /^[A-Za-z\s]+$/;
+    const noHtmlTagsPattern = /<[^>]*>/;
+    const wordLimit = 500;
+    const wordCount = body.trim().split(/\s+/).length;
+
+    return bodyPattern.test(body) &&
+           !noHtmlTagsPattern.test(body) &&
+           wordCount <= wordLimit;
+  }
+}
